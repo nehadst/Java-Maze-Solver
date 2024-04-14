@@ -61,7 +61,6 @@ public class Main {
             System.out.println("Provided path is " + (isValid ? "valid" : "invalid"));
         } else {
             String exploredPath = maze.explrmaze();
-            System.out.println("Canonical Maze Path: " + exploredPath);
             System.out.println("Factorized Maze Path: " + maze.factorizePath(exploredPath));
         }
 

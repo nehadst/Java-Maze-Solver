@@ -51,25 +51,25 @@ public class Maze {
 
     public String factorizePath(String path) {
         StringBuilder factoredPath = new StringBuilder();
-        char lastChar = path.charAt(0);
-        int count = 1;
-        for (int i = 1; i < path.length(); i++) {
-            char currentChar = path.charAt(i);
-            if (currentChar == lastChar) {
-                count++;
-            } else {
-                if (count > 1) {
-                    factoredPath.append(count);
+        int i = 0;
+        while (i < path.length()) {
+            char action = path.charAt(i);
+            int count = 1;
+            i++;
+  
+            if (i < path.length() && (path.charAt(i) == 'R' || path.charAt(i) == 'L')) {
+                char rotation = path.charAt(i);
+                i++;
+                while (i + 1 < path.length() && path.charAt(i) == action && path.charAt(i + 1) == rotation) {
+                    count++;
+                    i += 2;
                 }
-                factoredPath.append(lastChar);
-                lastChar = currentChar;
-                count = 1;
+                if (count > 1) factoredPath.append(count);
+                factoredPath.append(action).append(rotation);
+            } else {
+                factoredPath.append(action);
             }
         }
-        if (count > 1) {
-            factoredPath.append(count);
-        }
-        factoredPath.append(lastChar);
         return factoredPath.toString();
     }
 
