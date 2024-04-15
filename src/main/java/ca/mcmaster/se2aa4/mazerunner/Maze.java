@@ -26,6 +26,14 @@ public class Maze {
         return this.maze;
     }
 
+    public int getX(){
+        return this.x;
+    }
+
+    public int getY(){
+        return this.y;
+    }
+
     public void setMazeExplorer(MazeExplorer maze_explorer) {
         this.maze_explorer = maze_explorer;
     }
@@ -46,65 +54,17 @@ public class Maze {
         return maze[0].length;
     }
 
-    public String factorizePath(String path) {
-        StringBuilder factoredPath = new StringBuilder();
-        int i = 0;
-        while (i < path.length()) {
-            char action = path.charAt(i);
-            int count = 1;
-            i++;
-  
-            if (i < path.length() && (path.charAt(i) == 'R' || path.charAt(i) == 'L')) {
-                char rotation = path.charAt(i);
-                i++;
-                while (i + 1 < path.length() && path.charAt(i) == action && path.charAt(i + 1) == rotation) {
-                    count++;
-                    i += 2;
-                }
-                if (count > 1) factoredPath.append(count);
-                factoredPath.append(action).append(rotation);
-            } else {
-                factoredPath.append(action);
-            }
-        }
-        return factoredPath.toString();
+    public String factorizePath(String pathString) {
+        Path path = new Path(pathString, dir.getDirection(), this);
+        return path.factorizePath(pathString);
     }
 
+    public boolean verifyPath(String pathString) {
+    Path path = new Path(pathString, dir.getDirection(), this);
+    return path.verifyPath();
+}
     
-
-        public boolean verifyPath(String pathString) {
-            int localX = x;
-            int localY = y;
-            Direction.DirectionEnum localDir =dir.getDirection();
-    
-            for (char step : pathString.toCharArray()) {
-                switch (step) {
-                    case 'F':
-                        if (!canMove(localX, localY, localDir)) {
-                            return false;
-                        }
-                        if (localDir == Direction.DirectionEnum.UP) localX--;
-                        if (localDir == Direction.DirectionEnum.RIGHT) localY++;
-                        if (localDir == Direction.DirectionEnum.DOWN) localX++;
-                        if (localDir == Direction.DirectionEnum.LEFT) localY--;
-                        break;
-                    case 'R':
-                        localDir = dir.turnRight();
-                        break;
-                    case 'L':
-                        localDir = dir.turnLeft();
-                        break;
-                    default:
-                        return false;
-                }
-                if (localX < 0 || localX >= maze.length || localY < 0 || localY >= maze[0].length || maze[localX][localY] == WALL) {
-                    return false;
-                }
-            }
-            return localY == maze[0].length - 1;
-        }
-    
-        private boolean canMove(int localX, int localY, Direction.DirectionEnum localDir) {
+        public boolean canMove(int localX, int localY, Direction.DirectionEnum localDir) {
             switch (localDir) {
                 case UP: return localX > 0 && maze[localX - 1][localY] == PATH;
                 case RIGHT: return localY < maze[0].length - 1 && maze[localX][localY + 1] == PATH;

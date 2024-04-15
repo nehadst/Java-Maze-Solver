@@ -1,7 +1,5 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-
-
 public class Direction {
     public enum DirectionEnum {
         UP, RIGHT, DOWN, LEFT
@@ -17,11 +15,11 @@ public class Direction {
         return this.direction;
     }
 
-    public Direction.DirectionEnum turnRight() {
-        return DirectionEnum.values()[(this.direction.ordinal() + 1) % 4];
+    public static Direction.DirectionEnum turnRight(DirectionEnum direction) {
+        return DirectionEnum.values()[(direction.ordinal() + 1) % 4];
     }
 
-    public Direction.DirectionEnum turnLeft() {
-        return DirectionEnum.values()[(this.direction.ordinal() + 3) % 4];
+    public static Direction.DirectionEnum turnLeft(DirectionEnum direction) {
+        return DirectionEnum.values()[(direction.ordinal() + 3) % 4];
     }
 }

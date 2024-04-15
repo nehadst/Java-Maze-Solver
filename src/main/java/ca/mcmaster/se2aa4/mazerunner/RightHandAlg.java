@@ -32,7 +32,7 @@ public class RightHandAlg implements MazeExplorer {
         while (y < maze.getWidth() - 1) {
             if (canMove(turnRight(dir))) {
                 if (forwardCount > 0) {
-                    path.append(forwardCount).append('F');
+                    path.append("F".repeat(forwardCount));
                     forwardCount = 0;
                 }
                 turnRight();
@@ -47,7 +47,7 @@ public class RightHandAlg implements MazeExplorer {
             } else {
 
                 if (forwardCount > 0) {
-                    path.append(forwardCount).append('F');
+                    path.append("F".repeat(forwardCount));
                     forwardCount = 0;
                 }
                 turnLeft();
@@ -61,7 +61,7 @@ public class RightHandAlg implements MazeExplorer {
             }
         }
         if (forwardCount > 0) {
-            path.append(forwardCount).append('F');
+            path.append("F".repeat(forwardCount));
         }
     
         return path.toString();
