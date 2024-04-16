@@ -14,22 +14,22 @@ public class Maze {
     private Node[][] nodes;
 
     public void initializeGraph() {
-        nodes = new Node[getLength()][getWidth()]; // Initialize node grid
+        nodes = new Node[getLength()][getWidth()];
         for (int i = 0; i < getLength(); i++) {
             for (int j = 0; j < getWidth(); j++) {
                 if (maze[i][j] == PATH) {
                     nodes[i][j] = new Node(i, j);
-                    // Connect to adjacent nodes
-                    if (i > 0 && maze[i - 1][j] == PATH) { // Connect upwards
+                    
+                    if (i > 0 && maze[i - 1][j] == PATH) {
                         nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i - 1][j]));
                     }
-                    if (i < getLength() - 1 && maze[i + 1][j] == PATH) { // Connect downwards
+                    if (i < getLength() - 1 && maze[i + 1][j] == PATH) {
                         nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i + 1][j]));
                     }
-                    if (j > 0 && maze[i][j - 1] == PATH) { // Connect left
+                    if (j > 0 && maze[i][j - 1] == PATH) {
                         nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i][j - 1]));
                     }
-                    if (j < getWidth() - 1 && maze[i][j + 1] == PATH) { // Connect right
+                    if (j < getWidth() - 1 && maze[i][j + 1] == PATH) {
                         nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i][j + 1]));
                     }
                 }
