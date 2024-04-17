@@ -57,8 +57,8 @@ public class Maze {
         this.maze_explorer = maze_explorer;
     }
 
-    public String explrmaze() {
-        return maze_explorer.explrmaze(this);
+    public String exploreMaze() {
+        return maze_explorer.exploreMaze(this);
     }
 
     public int getLength(){

@@ -76,7 +76,7 @@ public class Main {
                     System.out.println("Factorized DFS Path: " + factorizedDFSPath);
                 }
             } else if ("rightHand".equalsIgnoreCase(method)) {
-                String exploredPath = maze.explrmaze();
+                String exploredPath = maze.exploreMaze();
                 System.out.println("Explored Path: " + exploredPath);
                 System.out.println("Factorized Maze Path: " + maze.factorizePath(exploredPath));
             }

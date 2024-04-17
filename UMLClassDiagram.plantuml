@@ -1,0 +1,54 @@
+@startuml
+
+' Define classes
+class Main
+class Configuration
+class Maze
+class Node
+class Edge
+class DFSAlgorithm
+class RightHandAlg
+class Direction
+class Path
+class DFSPathConverter
+class MazeGraphBuilder
+
+' Define interfaces
+interface MazeExplorer
+
+' Main class relations
+Main --> Configuration
+Main --> Maze
+Main --> Benchmark
+
+
+' Maze relations
+Maze --> MazeExplorer
+
+' MazeExplorer interface implementations
+DFSAlgorithm .up.|> MazeExplorer
+RightHandAlg .up.|> MazeExplorer
+
+'DFSALgorithm relations
+DFSAlgorithm o--> Direction
+
+'RightHandAlg relations
+RightHandAlg o--> Direction
+
+' PathConverter
+DFSPathConverter .up.> Direction
+
+' Path usage
+Path .up.> Direction
+
+'Node relations
+Node --* Edge
+
+DFSAlgorithm --* MazeGraphBuilder
+
+MazeGraphBuilder --* Node
+
+
+
+
+@enduml

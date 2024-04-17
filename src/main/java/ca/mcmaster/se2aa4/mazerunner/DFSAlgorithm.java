@@ -8,7 +8,7 @@ public class DFSAlgorithm implements MazeExplorer {
         this.maze = maze;
     }
 
-    public String explrmaze(Maze maze) {
+    public String exploreMaze(Maze maze) {
         List<String> path = maze.solveMazeWithDFS();
         return String.join(", ", path);
     }

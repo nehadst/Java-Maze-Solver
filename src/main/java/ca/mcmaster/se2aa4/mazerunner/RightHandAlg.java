@@ -25,7 +25,7 @@ public class RightHandAlg implements MazeExplorer {
     
 
 
-    public String explrmaze(Maze maze) {
+    public String exploreMaze(Maze maze) {
         StringBuilder path = new StringBuilder();
         int forwardCount = 0;
 
