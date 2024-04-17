@@ -67,7 +67,7 @@ public class RightHandAlg implements MazeExplorer {
         return path.toString();
     }
     
-    private boolean canMove() {
+    public boolean canMove() {
         return canMove(dir);
     }
 
