@@ -32,7 +32,7 @@ public class Main {
 
         String filePath = cmd.getOptionValue("i");
         String pathToVerify = cmd.getOptionValue("p");
-        String method = cmd.getOptionValue("method", "rightHand"); // Default is rightHand if not specified
+        String method = cmd.getOptionValue("method", "rightHand");
 
         if (filePath == null) {
             logger.error("Input file not specified.");
@@ -46,7 +46,6 @@ public class Main {
         }
 
         Maze maze = new Maze(config.getMazeConfig());
-        // Log the chosen method for debugging purposes
         logger.info("Chosen method: " + method);
 
         if ("dfs".equalsIgnoreCase(method)) {

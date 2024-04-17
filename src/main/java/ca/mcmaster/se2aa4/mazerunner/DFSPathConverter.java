@@ -19,13 +19,13 @@ public class DFSPathConverter {
             int x2 = Integer.parseInt(nextPos[0]);
             int y2 = Integer.parseInt(nextPos[1]);
 
-            if (y2 == y1 + 1) { // Moving east
+            if (y2 == y1 + 1) {
                 directions.append(adjustDirection(currentDirection, Direction.EAST));
-            } else if (y2 == y1 - 1) { // Moving west
+            } else if (y2 == y1 - 1) {
                 directions.append(adjustDirection(currentDirection, Direction.WEST));
-            } else if (x2 == x1 + 1) { // Moving south
+            } else if (x2 == x1 + 1) {
                 directions.append(adjustDirection(currentDirection, Direction.SOUTH));
-            } else if (x2 == x1 - 1) { // Moving north
+            } else if (x2 == x1 - 1) {
                 directions.append(adjustDirection(currentDirection, Direction.NORTH));
             }
             currentDirection = updateDirection(currentDirection, directions.charAt(directions.length() - 1));
@@ -35,7 +35,7 @@ public class DFSPathConverter {
 
     private static String adjustDirection(Direction current, Direction target) {
         if (current == target) {
-            return "F"; // Forward
+            return "F";
         } else if ((current == Direction.NORTH && target == Direction.EAST) ||
                    (current == Direction.EAST && target == Direction.SOUTH) ||
                    (current == Direction.SOUTH && target == Direction.WEST) ||

@@ -5,56 +5,27 @@ import java.util.ArrayList;
 
 public class Maze {
 
-    private static final char WALL = '#';
+
     private static final char PATH = ' ';
     private char[][] maze;
     private int x, y;
     private Direction dir;
     private MazeExplorer maze_explorer;
     private Node[][] nodes;
-    private Node endNode;
+    private MazeGraphBuilder builder;
 
-    private void initializeGraph() {
-        nodes = new Node[getLength()][getWidth()];
-        for (int i = 0; i < getLength(); i++) {
-            for (int j = 0; j < getWidth(); j++) {
-                if (maze[i][j] == PATH) {
-                    if (nodes[i][j] == null) {
-                        nodes[i][j] = new Node(i, j);
-                    }
-                    linkNodes(i, j);
-                }
-            }
-        }
-    }
 
-    private void linkNodes(int i, int j) {
-        if (i > 0 && maze[i - 1][j] == PATH) {
-            if (nodes[i-1][j] == null) nodes[i-1][j] = new Node(i-1, j);
-            nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i-1][j]));
-        }
-        if (i < getLength() - 1 && maze[i + 1][j] == PATH) {
-            if (nodes[i+1][j] == null) nodes[i+1][j] = new Node(i+1, j);
-            nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i+1][j]));
-        }
-        if (j > 0 && maze[i][j - 1] == PATH) {
-            if (nodes[i][j-1] == null) nodes[i][j-1] = new Node(i, j-1);
-            nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i][j-1]));
-        }
-        if (j < getWidth() - 1 && maze[i][j + 1] == PATH) {
-            if (nodes[i][j+1] == null) nodes[i][j+1] = new Node(i, j+1);
-            nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i][j+1]));
-        }
-    }
+
 
     public Maze(char[][] maze) {
         this.maze = maze;
-        initializeGraph();  // Ensures all nodes and edges are created
-        this.x = 1; // Manually set to a known open path if auto-detection fails
+        this.nodes = new Node[maze.length][maze[0].length];
+        this.builder = new MazeGraphBuilder(this, nodes, maze);
+        this.x = 1;
         this.y = 1;
         this.dir = new Direction(Direction.DirectionEnum.RIGHT);
         findStartingPosition();
-        initializeGraph();
+        builder.initializeGraph();
     }
     private void findStartingPosition() {
         for (int i = 0; i < getLength(); i++) {
@@ -124,23 +95,10 @@ public class Maze {
     public List<String> solveMazeWithDFS() {
         Node startNode = nodes[x][y];
         List<String> path = new ArrayList<>();
-        dfs(startNode, path);
+        DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(maze);
+        dfsAlgorithm.dfs(startNode, path);
         return path;
     }
-    
-    private void dfs(Node node, List<String> path) {
-        if (node == null || node.isVisited()) {
-            return;
-        }
-        node.visit();
-        path.add("(" + node.getX() + ", " + node.getY() + ")");
-    
-        for (Edge edge : node.getEdges()) {
-            Node nextNode = edge.getEnd();
-            if (!nextNode.isVisited()) {
-                dfs(nextNode, path);
-            }
-        }
-    }
+
 }
 
