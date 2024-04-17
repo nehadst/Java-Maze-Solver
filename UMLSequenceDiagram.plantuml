@@ -1,0 +1,72 @@
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+skinparam sequenceArrowThickness 1.5
+skinparam sequenceBoxBorderColor transparent
+
+participant "Main" as Main
+participant "Configuration" as Config
+participant "Maze" as Maze
+participant "MazeExplorer" as Explorer
+participant "RighjtHandAlg" as RightHandAlg
+participant "Direction" as Direction
+participant "Path" as Path
+participant "MazeGraphBuilder" as MazeGraphBuilder
+participant "Node" as Node
+participant "Edge" as Edge
+participant "DFSAlgorithm" as DFSAlgorithm
+participant "DFSPathConverter" as DFSPathConverter
+participant "Benchmark" as Benchmark
+
+Main -> Config : readMaze(args)
+activate Config
+Config --> Main : mazeConfig
+deactivate Config
+
+Main -> Maze : new(mazeConfig)
+activate Maze
+Maze -> MazeGraphBuilder : initializeGraph()
+activate MazeGraphBuilder
+MazeGraphBuilder -> Node : new(i, j)
+activate Node
+Node --> MazeGraphBuilder : node
+deactivate Node
+MazeGraphBuilder -> Edge : new(node, adjacentNode)
+activate Edge
+Edge --> MazeGraphBuilder : edge
+deactivate Edge
+MazeGraphBuilder --> Maze : nodes
+deactivate MazeGraphBuilder
+
+Main -> Benchmark : new(Maze)
+activate Benchmark
+
+alt If using RightHandAlg
+    Main -> RightHandAlg : new(mazeConfig)
+    activate RightHandAlg
+    Main -> Maze : setMazeExplorer(RightHandAlg)
+    Maze -> RightHandAlg : exploreMaze()
+    RightHandAlg --> Maze : path
+    Maze -> Path : factorizePath(path)
+    activate Path
+    Path --> Maze : factorizedPath
+    deactivate Path
+    deactivate RightHandAlg
+    end
+
+alt If using DFS Algorithm
+    Main -> DFSAlgorithm : new(mazeConfig)
+    activate DFSAlgorithm
+    Main -> Maze : setMazeExplorer(DFSAlgorithm)
+    Maze -> DFSAlgorithm : exploreMaze()
+    DFSAlgorithm --> Maze : path
+    Maze -> Path : factorizePath(path)
+    activate Path
+    Path --> Maze : factorizedPath
+    deactivate Path
+    deactivate DFSAlgorithm
+end
+
+Benchmark -> Main : runBenchmark()
+deactivate Benchmark
+@enduml
