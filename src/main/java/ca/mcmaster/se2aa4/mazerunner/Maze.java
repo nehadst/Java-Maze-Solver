@@ -18,7 +18,10 @@ public class Maze {
     public void setExplorationStrategy(MazeExplorer explorer) {
         this.explorer = explorer;
     }
-
+    public Node[][] getNodes() {
+        return nodes;
+    }
+    
     public Maze(char[][] maze) {
         this.maze = maze;
         this.nodes = new Node[maze.length][maze[0].length];
@@ -104,7 +107,7 @@ public class Maze {
         }
         List<String> path = new ArrayList<>();
         DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(maze);
-        dfsAlgorithm.dfs(startNode, path);
+        dfsAlgorithm.dfs(startNode.getX(), startNode.getY(), path);
         return path;
     }
 }

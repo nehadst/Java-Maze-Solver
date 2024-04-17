@@ -49,7 +49,24 @@ public class Main {
 
         Maze maze = new Maze(config.getMazeConfig());
         Benchmark benchmark = new Benchmark(maze);
+        if (method == null || baseline == null) {
+            logger.error("Algorithm method and baseline must be specified.");
+            return;
+        }
+
         benchmark.run(method, baseline);
+
+        if (baseline != null) {
+            benchmark.run(method, baseline);
+        }
+        MazeExplorer explorer = benchmark.getStrategy(method);
+        if (explorer != null) {
+            maze.setMazeExplorer(explorer);
+            String exploredPath = maze.exploreMaze();
+            logger.info("Explored Path: " + exploredPath);
+        } else {
+            logger.error("No valid maze exploration method specified.");
+        }
         logger.info("Chosen method: " + method);
 
         if ("dfs".equalsIgnoreCase(method)) {

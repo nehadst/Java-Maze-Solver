@@ -25,19 +25,17 @@ public class Benchmark {
         System.out.printf("Speedup: %.2f\n", speedup);
     }
 
-    private MazeExplorer getStrategy(String name) {
-        MazeExplorer explorer;
+    public MazeExplorer getStrategy(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Strategy name must not be null");
+        }
         switch (name.toLowerCase()) {
             case "dfs":
-                explorer = new DFSAlgorithm(maze.getMazeConfig());
-                break;
+                return new DFSAlgorithm(maze.getMazeConfig());
             case "righthand":
-                explorer = new RightHandAlg(maze.getMazeConfig());
-                break;
+                return new RightHandAlg(maze.getMazeConfig());
             default:
                 throw new IllegalArgumentException("No strategy found for name: " + name);
         }
-        maze.setMazeExplorer(explorer);
-        return explorer;
     }
 }

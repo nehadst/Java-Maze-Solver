@@ -8,10 +8,11 @@ class RightHandAlgTest {
 
     private Maze maze;
     private RightHandAlg rightHandAlg;
+    private char[][] mazeArray;
 
     @BeforeEach
     void setup() {
-        char[][] mazeArray = {
+        mazeArray = new char[][] {
             {'#', '#', '#', '#', '#', '#'},
             {' ', ' ', ' ', ' ', ' ', ' '},
             {'#', '#', '#', '#', '#', '#'}
@@ -32,5 +33,12 @@ class RightHandAlgTest {
     @Test
     void testCanMove() {
         assertTrue(rightHandAlg.canMove(), "Should be able to move right at the start.");
+    }
+
+    @Test
+    void testFactorizePath(){
+        maze = new Maze(mazeArray);
+        String factorizedPath = maze.factorizePath("RRRRRR");
+        assertEquals("R6", factorizedPath, "Path should be factorized to R6.");
     }
 }
