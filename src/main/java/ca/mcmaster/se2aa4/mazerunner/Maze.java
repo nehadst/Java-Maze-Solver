@@ -13,9 +13,11 @@ public class Maze {
     private MazeExplorer maze_explorer;
     private Node[][] nodes;
     private MazeGraphBuilder builder;
+    private MazeExplorer explorer;
 
-
-
+    public void setExplorationStrategy(MazeExplorer explorer) {
+        this.explorer = explorer;
+    }
 
     public Maze(char[][] maze) {
         this.maze = maze;
@@ -58,7 +60,7 @@ public class Maze {
     }
 
     public String exploreMaze() {
-        return maze_explorer.exploreMaze(this);
+        return this.maze_explorer.exploreMaze(this);
     }
 
     public int getLength(){

@@ -20,6 +20,7 @@ public class Main {
         options.addOption("i", true, "inputfile");
         options.addOption("p", true, "path to verify");
         options.addOption("method", true, "Algorithm method (dfs or rightHand)");
+        options.addOption("baseline", true, "comaprison baseline");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd;
@@ -33,6 +34,7 @@ public class Main {
         String filePath = cmd.getOptionValue("i");
         String pathToVerify = cmd.getOptionValue("p");
         String method = cmd.getOptionValue("method", "rightHand");
+        String baseline = cmd.getOptionValue("baseline");
 
         if (filePath == null) {
             logger.error("Input file not specified.");
@@ -46,6 +48,8 @@ public class Main {
         }
 
         Maze maze = new Maze(config.getMazeConfig());
+        Benchmark benchmark = new Benchmark(maze);
+        benchmark.run(method, baseline);
         logger.info("Chosen method: " + method);
 
         if ("dfs".equalsIgnoreCase(method)) {
