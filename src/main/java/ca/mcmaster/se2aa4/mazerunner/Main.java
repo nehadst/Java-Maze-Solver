@@ -63,16 +63,22 @@ public class Main {
             logger.info("Verifying provided path: " + pathToVerify);
             boolean isValid = maze.verifyPath(pathToVerify);
             System.out.println("Provided path is " + (isValid ? "valid" : "invalid"));
-        } else {
-            List<String> exploredPath = maze.solveMazeWithDFS();
-            System.out.println("Explored Path: " + String.join(", ", exploredPath));
+        }else {
             if ("dfs".equalsIgnoreCase(method)) {
-                String directionPath = DFSPathConverter.convertPathToDirections(exploredPath);
-                System.out.println("Directions: " + directionPath);
-                String factorizedDFSPath = maze.factorizePath(directionPath);
-                System.out.println("Factorized DFS Path: " + factorizedDFSPath);
+                List<String> dfsPath = maze.solveMazeWithDFS();
+                if (dfsPath.isEmpty()) {
+                    System.out.println("DFS Path is empty.");
+                } else {
+                    System.out.println("DFS Path: " + dfsPath);
+                    String directionPath = DFSPathConverter.convertPathToDirections(dfsPath);
+                    System.out.println("Directions: " + directionPath);
+                    String factorizedDFSPath = maze.factorizePath(directionPath);
+                    System.out.println("Factorized DFS Path: " + factorizedDFSPath);
+                }
             } else if ("rightHand".equalsIgnoreCase(method)) {
-                System.out.println("Factorized Maze Path: " + maze.factorizePath(String.join(", ", exploredPath)));
+                String exploredPath = maze.explrmaze();
+                System.out.println("Explored Path: " + exploredPath);
+                System.out.println("Factorized Maze Path: " + maze.factorizePath(exploredPath));
             }
         }
     }

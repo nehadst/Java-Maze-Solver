@@ -21,11 +21,13 @@ public class Maze {
         this.maze = maze;
         this.nodes = new Node[maze.length][maze[0].length];
         this.builder = new MazeGraphBuilder(this, nodes, maze);
-        this.x = 1;
-        this.y = 1;
-        this.dir = new Direction(Direction.DirectionEnum.RIGHT);
         findStartingPosition();
         builder.initializeGraph();
+        this.dir = new Direction(Direction.DirectionEnum.RIGHT);
+        if (nodes[this.x][this.y] == null) {
+            System.out.println("No start node at the supposed start position.");
+            return;
+        }
     }
     private void findStartingPosition() {
         for (int i = 0; i < getLength(); i++) {
@@ -94,11 +96,14 @@ public class Maze {
     }
     public List<String> solveMazeWithDFS() {
         Node startNode = nodes[x][y];
+        if (startNode == null) {
+            System.out.println("Start node is null.");
+            return new ArrayList<>();
+        }
         List<String> path = new ArrayList<>();
         DFSAlgorithm dfsAlgorithm = new DFSAlgorithm(maze);
         dfsAlgorithm.dfs(startNode, path);
         return path;
     }
-
 }
 

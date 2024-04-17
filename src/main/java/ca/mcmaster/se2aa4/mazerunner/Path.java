@@ -40,7 +40,6 @@ public class Path {
     }
     
     public String factorizePath(String pathString) {
-        System.out.println(pathString);
         String factorizedPath = "";
         int currentChar = 1;
         if (pathString.isEmpty()){
