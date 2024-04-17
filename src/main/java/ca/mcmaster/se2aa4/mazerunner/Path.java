@@ -43,6 +43,9 @@ public class Path {
         System.out.println(pathString);
         String factorizedPath = "";
         int currentChar = 1;
+        if (pathString.isEmpty()){
+            return "";
+        }
         char prevChar = pathString.charAt(0);
         for (int i=1; i<pathString.length(); i++) {
             if (pathString.charAt(i) != prevChar) {

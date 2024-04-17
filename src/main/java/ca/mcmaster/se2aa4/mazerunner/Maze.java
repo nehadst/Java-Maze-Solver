@@ -12,51 +12,56 @@ public class Maze {
     private Direction dir;
     private MazeExplorer maze_explorer;
     private Node[][] nodes;
+    private Node endNode;
 
-    public void initializeGraph() {
+    private void initializeGraph() {
         nodes = new Node[getLength()][getWidth()];
         for (int i = 0; i < getLength(); i++) {
             for (int j = 0; j < getWidth(); j++) {
                 if (maze[i][j] == PATH) {
-                    nodes[i][j] = new Node(i, j);
-                    
-                    if (i > 0 && maze[i - 1][j] == PATH) {
-                        nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i - 1][j]));
+                    if (nodes[i][j] == null) {
+                        nodes[i][j] = new Node(i, j);
                     }
-                    if (i < getLength() - 1 && maze[i + 1][j] == PATH) {
-                        nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i + 1][j]));
-                    }
-                    if (j > 0 && maze[i][j - 1] == PATH) {
-                        nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i][j - 1]));
-                    }
-                    if (j < getWidth() - 1 && maze[i][j + 1] == PATH) {
-                        nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i][j + 1]));
-                    }
+                    linkNodes(i, j);
                 }
             }
         }
     }
 
-    public Maze(char[][] maze) {
-        this.maze = maze;
-        for (int i = 0; i < maze.length; i++) {
-            if (maze[i][0] == PATH) {
-                x = i;
-                y = 0;
-                break;
-            }
+    private void linkNodes(int i, int j) {
+        if (i > 0 && maze[i - 1][j] == PATH) {
+            if (nodes[i-1][j] == null) nodes[i-1][j] = new Node(i-1, j);
+            nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i-1][j]));
         }
-        this.dir = new Direction(Direction.DirectionEnum.RIGHT);
-        initializeStartingPosition();
-        initializeGraph();
+        if (i < getLength() - 1 && maze[i + 1][j] == PATH) {
+            if (nodes[i+1][j] == null) nodes[i+1][j] = new Node(i+1, j);
+            nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i+1][j]));
+        }
+        if (j > 0 && maze[i][j - 1] == PATH) {
+            if (nodes[i][j-1] == null) nodes[i][j-1] = new Node(i, j-1);
+            nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i][j-1]));
+        }
+        if (j < getWidth() - 1 && maze[i][j + 1] == PATH) {
+            if (nodes[i][j+1] == null) nodes[i][j+1] = new Node(i, j+1);
+            nodes[i][j].addEdge(new Edge(nodes[i][j], nodes[i][j+1]));
+        }
     }
 
-    private void initializeStartingPosition() {
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[i].length; j++) {
+    public Maze(char[][] maze) {
+        this.maze = maze;
+        initializeGraph();  // Ensures all nodes and edges are created
+        this.x = 1; // Manually set to a known open path if auto-detection fails
+        this.y = 1;
+        this.dir = new Direction(Direction.DirectionEnum.RIGHT);
+        findStartingPosition();
+        initializeGraph();
+    }
+    private void findStartingPosition() {
+        for (int i = 0; i < getLength(); i++) {
+            for (int j = 0; j < getWidth(); j++) {
                 if (maze[i][j] == PATH) {
                     this.x = i;
-                    this.y = j; 
+                    this.y = j;
                     return;
                 }
             }
@@ -116,26 +121,26 @@ public class Maze {
             default: return false;
         }
     }
-    public void solveMazeWithDFS() {
+    public List<String> solveMazeWithDFS() {
         Node startNode = nodes[x][y];
         List<String> path = new ArrayList<>();
         dfs(startNode, path);
+        return path;
     }
     
     private void dfs(Node node, List<String> path) {
+        if (node == null || node.isVisited()) {
+            return;
+        }
         node.visit();
+        path.add("(" + node.getX() + ", " + node.getY() + ")");
     
         for (Edge edge : node.getEdges()) {
             Node nextNode = edge.getEnd();
             if (!nextNode.isVisited()) {
-                if (nextNode.getX() > node.getX()) path.add("DOWN");
-                else if (nextNode.getX() < node.getX()) path.add("UP");
-                if (nextNode.getY() > node.getY()) path.add("RIGHT");
-                else if (nextNode.getY() < node.getY()) path.add("LEFT");
-    
                 dfs(nextNode, path);
-                path.add("BACKTRACK");
             }
         }
     }
 }
+

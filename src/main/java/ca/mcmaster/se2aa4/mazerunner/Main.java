@@ -8,6 +8,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import java.util.List;
+
 
 public class Main {
 
@@ -17,6 +19,7 @@ public class Main {
         Options options = new Options();
         options.addOption("i", true, "inputfile");
         options.addOption("p", true, "path to verify");
+        options.addOption("method", true, "Algorithm method (dfs or rightHand)");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd;
@@ -29,6 +32,8 @@ public class Main {
 
         String filePath = cmd.getOptionValue("i");
         String pathToVerify = cmd.getOptionValue("p");
+        String method = cmd.getOptionValue("method", "rightHand"); // Default is rightHand if not specified
+
         if (filePath == null) {
             logger.error("Input file not specified.");
             return;
@@ -39,19 +44,37 @@ public class Main {
             logger.error("Could not read the maze configuration.");
             return;
         }
+
         Maze maze = new Maze(config.getMazeConfig());
-        maze.setMazeExplorer(new RightHandAlg(maze.getMazeConfig()));
+        // Log the chosen method for debugging purposes
+        logger.info("Chosen method: " + method);
+
+        if ("dfs".equalsIgnoreCase(method)) {
+            maze.setMazeExplorer(new DFSAlgorithm(maze.getMazeConfig()));
+            logger.info("DFS Algorithm has been selected.");
+        } else if ("righthand".equalsIgnoreCase(method)) {
+            maze.setMazeExplorer(new RightHandAlg(maze.getMazeConfig()));
+            logger.info("Right Hand Algorithm has been selected.");
+        } else {
+            logger.error("No valid maze exploration method specified.");
+            return;
+        }
 
         if (pathToVerify != null) {
             logger.info("Verifying provided path: " + pathToVerify);
             boolean isValid = maze.verifyPath(pathToVerify);
             System.out.println("Provided path is " + (isValid ? "valid" : "invalid"));
         } else {
-            String exploredPath = maze.explrmaze();
-            System.out.println(exploredPath);
-            System.out.println("Factorized Maze Path: " + maze.factorizePath(exploredPath));
+            List<String> exploredPath = maze.solveMazeWithDFS();
+            System.out.println("Explored Path: " + String.join(", ", exploredPath));
+            if ("dfs".equalsIgnoreCase(method)) {
+                String directionPath = DFSPathConverter.convertPathToDirections(exploredPath);
+                System.out.println("Directions: " + directionPath);
+                String factorizedDFSPath = maze.factorizePath(directionPath);
+                System.out.println("Factorized DFS Path: " + factorizedDFSPath);
+            } else if ("rightHand".equalsIgnoreCase(method)) {
+                System.out.println("Factorized Maze Path: " + maze.factorizePath(String.join(", ", exploredPath)));
+            }
         }
-
-        logger.info("** End of MazeRunner");
     }
 }
